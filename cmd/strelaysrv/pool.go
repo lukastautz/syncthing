@@ -80,13 +80,13 @@ func poolHandler(pool string, uri *url.URL, mapping mapping, ownCert tls.Certifi
 		case http.StatusInternalServerError:
 			log.Printf("Failed to join %v: server error", pool)
 			log.Printf("Response data: %s", bs)
-			time.Sleep(time.Minute)
+			time.Sleep(time.Second * 10)
 			continue
 
 		case http.StatusBadRequest:
 			log.Printf("Failed to join %v: request or check error", pool)
 			log.Printf("Response data: %s", bs)
-			time.Sleep(time.Minute)
+			time.Sleep(time.Second * 10)
 			continue
 
 		case httpStatusEnhanceYourCalm:
@@ -96,13 +96,13 @@ func poolHandler(pool string, uri *url.URL, mapping mapping, ownCert tls.Certifi
 
 		case http.StatusUnauthorized:
 			log.Printf("Failed to join %v: IP address not matching external address", pool)
-			log.Println("Aborting")
-			return
+			time.Sleep(time.Second * 10)
+			continue
 
 		default:
 			log.Printf("Failed to join %v: unexpected status code from server: %d", pool, resp.StatusCode)
 			log.Printf("Response data: %s", bs)
-			time.Sleep(time.Minute)
+			time.Sleep(time.Second * 10)
 			continue
 		}
 
